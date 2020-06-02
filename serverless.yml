@@ -1,0 +1,40 @@
+service: test-shopify-app
+
+plugins:
+  # - serverless-plugin-typescript
+  # - serverless-webpack
+  # - serverless-nextjs-plugin
+  - serverless-offline
+  - serverless-api-cloudfront
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: hasigo-internal
+  region: ap-northeast-1
+  environment:
+    IS_LAMBDA: true
+
+custom:
+  apiCloudFront:
+    compress: true
+    cookies: all
+    querystring: all
+    priceClass: PriceClass_100
+
+functions:
+  shopifyApp:
+    handler: server.handler
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: /
+          method: post
+      - http:
+          method: get
+          path: /{any+}
+      - http:
+          method: post
+          path: /{any+}
